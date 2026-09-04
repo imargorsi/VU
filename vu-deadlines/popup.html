@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VU Buddy</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <h1>VU Buddy</h1>
+          <p class="byline">by Ar Gorsi</p>
+          <p id="sync-meta" class="sync-meta">Checking VULMS…</p>
+        </div>
+      </div>
+      <button id="sync-btn" class="sync-btn" type="button">Sync Now</button>
+    </header>
+
+    <div id="banner" class="banner" hidden></div>
+
+    <section class="summary" id="summary" aria-label="Deadline summary">
+      <div class="stat">
+        <strong id="count-upcoming">0</strong>
+        <span>Upcoming</span>
+      </div>
+      <div class="stat">
+        <strong id="count-today">0</strong>
+        <span>Due Today</span>
+      </div>
+      <div class="stat">
+        <strong id="count-overdue">0</strong>
+        <span>Overdue</span>
+      </div>
+    </section>
+
+    <nav class="filters" aria-label="Activity type">
+      <button class="chip is-active" data-filter="all" type="button">All</button>
+      <button class="chip" data-filter="assignment" type="button">Assignment</button>
+      <button class="chip" data-filter="quiz" type="button">Quiz</button>
+      <button class="chip" data-filter="gdb" type="button">GDB</button>
+    </nav>
+
+    <div id="course-filter-wrap" class="course-filter-wrap" hidden>
+      <label for="course-filter">Course</label>
+      <select id="course-filter">
+        <option value="all">All courses</option>
+      </select>
+    </div>
+
+    <main id="list" class="list"></main>
+
+    <section id="todoist-panel" class="todoist-panel" aria-label="Todoist"></section>
+
+    <footer class="footer" id="privacy-footer">
+      Your VULMS data stays in this browser.
+    </footer>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
