@@ -1,6 +1,6 @@
 # Branches
 
-VU Buddy is one repo with two long-lived editions. The Chrome package is always the `vu-deadlines/` folder.
+VU Deadlines is one repo with two long-lived editions. The Chrome package is always the `vu-deadlines/` folder.
 
 | Branch | Who it is for | Todoist |
 | --- | --- | --- |
@@ -22,7 +22,7 @@ git checkout main
 bash scripts/pack-chrome-store.sh
 ```
 
-Upload `store/vu-buddy-*-chrome.zip`. Host `store/privacy-policy.html` on HTTPS for the listing. Do not zip `doc/` or the `todoist` branch.
+Upload `store/vu-deadlines-*-chrome.zip`. Host `store/privacy-policy.html` on HTTPS for the listing. Do not zip `doc/` or the `todoist` branch.
 
 Switch back afterwards:
 

@@ -1,4 +1,4 @@
-# VU Buddy
+# VU Deadlines
 
 A small Manifest V3 Chrome extension by **Ar Gorsi**. It reads your VULMS To Do Calendar while you are already logged in, stores assignment / quiz / GDB deadlines locally, and reminds you before they are due.
 

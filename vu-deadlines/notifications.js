@@ -84,7 +84,7 @@
       iconUrl: "icons/icon128.png",
       title: title,
       message: message,
-      contextMessage: activity.courseName || activity.semester || "VU Buddy",
+      contextMessage: activity.courseName || activity.semester || "VU Deadlines",
       priority: key === "2h" ? 2 : 1
     });
   }

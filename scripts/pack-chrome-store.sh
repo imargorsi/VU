@@ -6,8 +6,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 VERSION="$(git -C "$ROOT" show main:vu-deadlines/manifest.json | python3 -c 'import json,sys; print(json.load(sys.stdin)["version"])')"
 OUT_DIR="$ROOT/store"
-OUT="$OUT_DIR/vu-buddy-${VERSION}-chrome.zip"
-STAGE="$(mktemp -d "${TMPDIR:-/tmp}/vu-buddy-pack.XXXXXX")"
+OUT="$OUT_DIR/vu-deadlines-${VERSION}-chrome.zip"
+STAGE="$(mktemp -d "${TMPDIR:-/tmp}/vu-deadlines-pack.XXXXXX")"
 
 cleanup() {
   rm -rf "$STAGE"
@@ -24,7 +24,7 @@ python3 - "$STAGE" <<'PY'
 import json, pathlib, sys
 
 DESCRIPTION = (
-    "Track VULMS assignment, quiz, and GDB deadlines locally. "
+    "Track VULMS assignment, quiz, and GDB due dates locally. "
     "Unofficial. Not affiliated with VU."
 )
 FOOTER = "Unofficial. Your VULMS data stays in this browser."
@@ -35,7 +35,11 @@ manifest_path = stage / "manifest.json"
 manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 if len(DESCRIPTION) > 132:
     raise SystemExit("manifest description exceeds 132 characters")
+manifest["name"] = "VU Deadlines"
+manifest["short_name"] = "VU Deadlines"
 manifest["description"] = DESCRIPTION
+if "action" in manifest and isinstance(manifest["action"], dict):
+    manifest["action"]["default_title"] = "VU Deadlines"
 manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 
 popup = stage / "popup.html"
@@ -93,6 +97,8 @@ with zipfile.ZipFile(path) as zf:
     manifest = json.loads(zf.read("manifest.json"))
     if manifest.get("manifest_version") != 3:
         raise SystemExit("manifest_version must be 3")
+    if manifest.get("name") != "VU Deadlines":
+        raise SystemExit("expected name VU Deadlines")
     if len(manifest.get("description", "")) > 132:
         raise SystemExit("description too long")
     if "todoist" in json.dumps(manifest).lower():

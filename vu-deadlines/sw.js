@@ -1,5 +1,5 @@
 /**
- * VU Buddy service worker.
+ * VU Deadlines service worker.
  * Periodic calendar sync, local cache, notifications.
  * Never reads cookies or credentials. Uses the existing VULMS session.
  */
