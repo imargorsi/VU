@@ -260,13 +260,6 @@ function renderList(items, now) {
   }).join("");
 }
 
-function todoistAgo(iso) {
-  if (!iso) {
-    return "Never";
-  }
-  return syncedLabel(iso).replace(/^Last synced: /, "");
-}
-
 function runtimeSend(payload, callback) {
   chrome.runtime.sendMessage(payload, function (response) {
     void chrome.runtime.lastError;
@@ -276,166 +269,8 @@ function runtimeSend(payload, callback) {
   });
 }
 
-function sendTodoist(type, extra, button) {
-  if (button) {
-    button.disabled = true;
-  }
-  runtimeSend(Object.assign({ type: type }, extra || {}), function (state) {
-    if (button) {
-      button.disabled = false;
-    }
-    render(state || currentState);
-  });
-}
-
-function requestTodoistAccess(onGranted) {
-  chrome.permissions.request(
-    {
-      permissions: ["identity"],
-      origins: ["https://api.todoist.com/*", "https://app.todoist.com/*"]
-    },
-    function (granted) {
-      if (!granted) {
-        return;
-      }
-      onGranted();
-    }
-  );
-}
-
-function renderTodoist(todoist) {
-  var root = $("todoist-panel");
-  var footer = $("privacy-footer");
-  var data = todoist || {};
-  var connected = Boolean(data.connected);
-  var expired = data.status === "expired";
-  var failed = data.status === "failed";
-  var statusHtml;
-  var body;
-  footer.textContent = connected
-    ? "Selected VULMS deadlines are sent to Todoist when sync is enabled."
-    : "Without Todoist, your VULMS data stays in this browser.";
-
-  if (expired) {
-    statusHtml = '<span class="todoist-status is-warn">⚠ Connection expired</span>';
-    body =
-      '<p class="todoist-copy">Todoist connection expired. Your VULMS deadlines are still stored locally.</p>' +
-      '<div class="todoist-actions"><button id="todoist-connect" type="button">Reconnect</button></div>';
-  } else if (failed) {
-    statusHtml = '<span class="todoist-status is-warn">⚠ Sync failed</span>';
-    body =
-      '<p class="todoist-copy">Your VULMS deadlines are still safely stored locally.' +
-      (data.error ? " " + escapeHtml(data.error) : "") +
-      "</p>" +
-      '<div class="todoist-actions">' +
-        (connected
-          ? '<button id="todoist-retry" type="button">Retry</button>' +
-            '<button class="ghost-btn" id="todoist-disconnect" type="button">Disconnect Todoist</button>'
-          : '<button id="todoist-connect" type="button">Connect Todoist</button>') +
-      "</div>" +
-      (connected
-        ? '<div id="todoist-confirm" class="confirm-box" hidden>Disconnect Todoist? Your existing Todoist tasks will NOT be deleted. ' +
-          '<button class="ghost-btn" id="todoist-cancel" type="button">Cancel</button> ' +
-          '<button id="todoist-confirm-yes" type="button">Disconnect</button></div>'
-        : "");
-  } else if (!connected || data.status === "disconnected") {
-    statusHtml = '<span class="todoist-status is-off">○ Not connected</span>';
-    body =
-      '<p class="todoist-copy">Sync your VULMS deadlines with Todoist.</p>' +
-      '<div class="todoist-actions"><button id="todoist-connect" type="button">Connect Todoist</button></div>';
-  } else {
-    var projects = data.projects || [];
-    var options = '<option value="">Select a project</option>' + projects.map(function (project) {
-      var selected = project.id === data.projectId ? " selected" : "";
-      return '<option value="' + escapeHtml(project.id) + '"' + selected + ">" + escapeHtml(project.name) + "</option>";
-    }).join("");
-    var stats = data.stats || { total: 0, synced: 0, pending: 0 };
-    statusHtml = '<span class="todoist-status is-on">● Connected</span>';
-    body =
-      '<div class="todoist-row"><span>Project</span><select id="todoist-project">' + options + "</select></div>" +
-      '<p class="todoist-copy">Last synced: ' + escapeHtml(todoistAgo(data.lastSync)) + "</p>" +
-      '<label class="auto-sync"><input id="todoist-autosync" type="checkbox"' +
-      (data.autoSync !== false ? " checked" : "") +
-      "> Automatically sync new/changed deadlines</label>" +
-      '<p class="todoist-stats">' + stats.total + " VULMS deadlines · " + stats.synced + " synced · " + stats.pending + " pending</p>" +
-      '<div class="todoist-actions">' +
-        '<button id="todoist-sync" type="button">Sync to Todoist</button>' +
-        '<button class="ghost-btn" id="todoist-create-project" type="button">Create "VU University" project</button>' +
-        '<button class="ghost-btn" id="todoist-disconnect" type="button">Disconnect Todoist</button>' +
-      "</div>" +
-      '<div id="todoist-confirm" class="confirm-box" hidden>Disconnect Todoist? Your existing Todoist tasks will NOT be deleted. ' +
-        '<button class="ghost-btn" id="todoist-cancel" type="button">Cancel</button> ' +
-        '<button id="todoist-confirm-yes" type="button">Disconnect</button></div>';
-  }
-
-  root.innerHTML =
-    '<div class="todoist-head"><h2>Todoist</h2>' + statusHtml + "</div>" + body;
-
-  var connectBtn = $("todoist-connect");
-  if (connectBtn) {
-    connectBtn.addEventListener("click", function () {
-      requestTodoistAccess(function () {
-        sendTodoist("VU_TODOIST_CONNECT", null, connectBtn);
-      });
-    });
-  }
-  var retryBtn = $("todoist-retry");
-  if (retryBtn) {
-    retryBtn.addEventListener("click", function () {
-      sendTodoist("VU_TODOIST_SYNC", null, retryBtn);
-    });
-  }
-  var projectSelect = $("todoist-project");
-  if (projectSelect) {
-    projectSelect.addEventListener("change", function (event) {
-      sendTodoist("VU_TODOIST_SET_PROJECT", { projectId: event.target.value || null });
-    });
-  }
-  var auto = $("todoist-autosync");
-  if (auto) {
-    auto.addEventListener("change", function (event) {
-      sendTodoist("VU_TODOIST_SET_AUTOSYNC", { enabled: event.target.checked });
-    });
-  }
-  var syncBtn = $("todoist-sync");
-  if (syncBtn) {
-    syncBtn.addEventListener("click", function () {
-      sendTodoist("VU_TODOIST_SYNC", null, syncBtn);
-    });
-  }
-  var createBtn = $("todoist-create-project");
-  if (createBtn) {
-    createBtn.addEventListener("click", function () {
-      sendTodoist("VU_TODOIST_CREATE_PROJECT", null, createBtn);
-    });
-  }
-  var disconnectBtn = $("todoist-disconnect");
-  if (disconnectBtn) {
-    disconnectBtn.addEventListener("click", function () {
-      var box = $("todoist-confirm");
-      if (box) {
-        box.hidden = false;
-        return;
-      }
-      sendTodoist("VU_TODOIST_DISCONNECT");
-    });
-  }
-  var cancelBtn = $("todoist-cancel");
-  if (cancelBtn) {
-    cancelBtn.addEventListener("click", function () {
-      $("todoist-confirm").hidden = true;
-    });
-  }
-  var confirmBtn = $("todoist-confirm-yes");
-  if (confirmBtn) {
-    confirmBtn.addEventListener("click", function () {
-      sendTodoist("VU_TODOIST_DISCONNECT", null, confirmBtn);
-    });
-  }
-}
-
 function render(state) {
-  currentState = state || { activities: [], syncStatus: "never", todoist: { connected: false, status: "disconnected" } };
+  currentState = state || { activities: [], syncStatus: "never" };
   var now = new Date();
   var meta = syncedLabel(currentState.lastSuccessfulSync);
   if (currentState.syncStatus === "never") {
@@ -455,12 +290,10 @@ function render(state) {
       $("count-upcoming").textContent = "0";
       $("count-today").textContent = "0";
       $("count-overdue").textContent = "0";
-      renderTodoist(currentState.todoist || {});
       return;
     }
   }
   renderList(items, now);
-  renderTodoist(currentState.todoist || {});
 }
 
 function setSyncing(isSyncing) {
@@ -505,7 +338,7 @@ chrome.storage.onChanged.addListener(function (changes, area) {
   if (area !== "local") {
     return;
   }
-  if (changes.vuDeadlinesState || changes.vuTodoistState) {
+  if (changes.vuDeadlinesState) {
     requestState();
   }
 });

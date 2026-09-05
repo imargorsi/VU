@@ -3,9 +3,9 @@
  * Periodic calendar sync, local cache, notifications.
  * Never reads cookies or credentials. Uses the existing VULMS session.
  */
-/* global VuParser, VuStorage, VuNotifications, VuTodoist */
+/* global VuParser, VuStorage, VuNotifications */
 
-importScripts("parser.js", "storage.js", "notifications.js", "todoist.js");
+importScripts("parser.js", "storage.js", "notifications.js");
 
 var CALENDAR_URL = "https://vulms.vu.edu.pk/ActivityCalendar/ActivityCalendar.aspx";
 var HOME_URL = "https://vulms.vu.edu.pk/Home.aspx";
@@ -216,11 +216,6 @@ async function syncDeadlines(reason) {
     var notifyResult = await VuNotifications.checkNotifications(state);
     state = notifyResult.state;
     await VuStorage.saveState(state);
-    try {
-      await VuTodoist.maybeAutoSyncAfterVulms();
-    } catch (todoistErr) {
-      /* Todoist is optional. Never roll back a successful VULMS sync. */
-    }
     return state;
   } catch (err) {
     state = failClosed(
@@ -289,76 +284,22 @@ chrome.notifications.onClicked.addListener(function (notificationId) {
   VuNotifications.openActivityFromNotification(notificationId);
 });
 
-async function getPopupState() {
-  var vulms = await VuStorage.loadState();
-  var todoist = await VuTodoist.getPublicState();
-  return Object.assign({}, vulms, { todoist: todoist });
-}
-
-function replyWithPopupState(sendResponse) {
-  getPopupState().then(sendResponse);
-}
-
-function handleTodoistAction(promise, sendResponse) {
-  promise
-    .then(function () {
-      return getPopupState();
-    })
-    .catch(function (err) {
-      return getPopupState().then(function (state) {
-        state.todoist = state.todoist || {};
-        state.todoist.error = err && err.message ? err.message : "Todoist request failed.";
-        if (state.todoist.status !== "expired") {
-          state.todoist.status = "failed";
-        }
-        return state;
-      });
-    })
-    .then(sendResponse);
-}
-
 chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
   if (!message || !message.type) {
     return;
   }
   if (message.type === "VU_SYNC_NOW") {
-    syncDeadlines("manual").then(function () {
-      return getPopupState();
-    }).then(sendResponse);
+    syncDeadlines("manual").then(sendResponse);
     return true;
   }
   if (message.type === "VU_GET_STATE") {
-    replyWithPopupState(sendResponse);
+    VuStorage.loadState().then(sendResponse);
     return true;
   }
   if (message.type === "VU_OPEN_VULMS") {
     chrome.tabs.create({ url: ORIGIN });
     sendResponse({ ok: true });
     return;
-  }
-  if (message.type === "VU_TODOIST_CONNECT") {
-    handleTodoistAction(VuTodoist.connect(), sendResponse);
-    return true;
-  }
-  if (message.type === "VU_TODOIST_DISCONNECT") {
-    handleTodoistAction(VuTodoist.disconnect(), sendResponse);
-    return true;
-  }
-  if (message.type === "VU_TODOIST_SYNC") {
-    handleTodoistAction(VuTodoist.syncNow(), sendResponse);
-    return true;
-  }
-  if (message.type === "VU_TODOIST_SET_PROJECT") {
-    handleTodoistAction(VuTodoist.setProject(message.projectId), sendResponse);
-    return true;
-  }
-  if (message.type === "VU_TODOIST_SET_AUTOSYNC") {
-    handleTodoistAction(VuTodoist.setAutoSync(message.enabled), sendResponse);
-    return true;
-  }
-  if (message.type === "VU_TODOIST_CREATE_PROJECT") {
-    handleTodoistAction(VuTodoist.createUniversityProject(), sendResponse);
-    return true;
   }
 });
 

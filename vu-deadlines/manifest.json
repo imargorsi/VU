@@ -3,22 +3,15 @@
   "name": "VU Buddy",
   "short_name": "VU Buddy",
   "version": "1.2.0",
-  "description": "Track Virtual University LMS deadlines locally. Optional Todoist sync. By Ar Gorsi.",
+  "description": "Track Virtual University LMS deadlines locally. By Ar Gorsi.",
   "author": "Ar Gorsi",
   "permissions": [
     "storage",
     "alarms",
     "notifications"
   ],
-  "optional_permissions": [
-    "identity"
-  ],
   "host_permissions": [
     "https://vulms.vu.edu.pk/*"
-  ],
-  "optional_host_permissions": [
-    "https://api.todoist.com/*",
-    "https://app.todoist.com/*"
   ],
   "background": {
     "service_worker": "sw.js"
@@ -47,6 +40,6 @@
     }
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://vulms.vu.edu.pk https://api.todoist.com"
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://vulms.vu.edu.pk"
   }
 }

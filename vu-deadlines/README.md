@@ -12,41 +12,34 @@ VULMS course codes such as `MTH301` and `CS302` are easy to forget. This extensi
 - Sorts overdue items first, then the nearest upcoming deadline
 - Sends Chrome notifications 72 hours, 24 hours, and 2 hours before a deadline
 - Stores everything in `chrome.storage.local`
-- Optionally syncs those local deadlines into a Todoist project you choose
 
-It does not include a backend, accounts, analytics, Google Calendar, WhatsApp, or AI.
+It does not include a backend, accounts, analytics, Google Calendar, WhatsApp, Todoist, or AI.
 
 ## Privacy
 
-This extension does not use a server, analytics, tracking, advertising, or a cloud database.
+Your VULMS data stays in your browser. This extension does not use a server, analytics, tracking, advertising, or a cloud database.
 
-**Without Todoist:** VULMS data stays in your browser. Network traffic is only `https://vulms.vu.edu.pk/*`.
-
-**With Todoist enabled:** Selected VULMS deadline data (course code, title, type, semester, due date, and activity URL) is sent to Todoist. VULMS usernames, passwords, cookies, and session tokens are never sent to Todoist.
+All network traffic is limited to `https://vulms.vu.edu.pk/*`.
 
 The extension:
 
 - never asks for your VULMS username or password
-- never asks for your Todoist password
 - never reads cookie values
 - never stores roll numbers or VULMS session tokens
 - does not load remote JavaScript, Google Fonts, or analytics
 
-The `connect-src` Content Security Policy on extension pages can talk only to VULMS and, after you connect Todoist, the official Todoist API.
+The `connect-src` Content Security Policy on extension pages can talk only to VULMS.
 
 ## Permissions
 
 | Permission | Why it exists |
 | --- | --- |
-| `storage` | Cache deadlines, course names, sync timestamps, reminder flags, and Todoist mappings |
+| `storage` | Cache deadlines, course names, sync timestamps, and reminder flags |
 | `alarms` | MV3 service workers are killed when idle. Alarms are required for periodic sync and reminder checks |
 | `notifications` | Deadline reminders |
 | `host_permissions: https://vulms.vu.edu.pk/*` | Fetch the calendar and home page using your existing VULMS session |
-| `optional_permissions: identity` | Requested only when you click Connect Todoist. Used for the OAuth window |
-| `optional_host_permissions: https://api.todoist.com/*` | Requested only when connecting Todoist. Token exchange and REST API |
-| `optional_host_permissions: https://app.todoist.com/*` | Requested only when connecting Todoist. OAuth consent page |
 
-Not requested: `tabs`, `scripting`, `activeTab`, `cookies`, `webRequest`, `declarativeNetRequest`, `<all_urls>`.
+Not requested: `tabs`, `scripting`, `activeTab`, `cookies`, `webRequest`, `declarativeNetRequest`, `<all_urls>`, `identity`.
 
 A content script is declared only for `https://vulms.vu.edu.pk/*`. That is a fallback fetch in the page origin. It is not extra permission, and it does not run on other sites.
 
@@ -129,8 +122,6 @@ If a teacher extends a deadline, the same activity is updated. Reminder flags ar
 
 Not stored: VULMS password, username, roll number, cookies, or VULMS session tokens.
 
-Todoist access/refresh tokens are stored separately in `vuTodoistAuth` only after you connect Todoist, and only the service worker reads that key.
-
 ## How to load the extension in Chrome
 
 1. Open `chrome://extensions`
@@ -146,7 +137,6 @@ From this folder:
 
 ```bash
 node tests/parser.test.js
-node tests/todoist.test.js
 ```
 
 No extra packages are required.
@@ -175,8 +165,6 @@ Stable IDs + upsert
 chrome.storage.local
      ↓
 Popup UI + notifications
-     ↓
-Optional Todoist adapter (never inside the VULMS parser)
 ```
 
 If the service-worker fetch comes back as a login page while a VULMS tab is open, the content script retries the same URLs in the page context and messages the HTML back. Parsing still happens in shared `parser.js`.
@@ -189,49 +177,9 @@ If the service-worker fetch comes back as a login page while a VULMS tab is open
 - Service-worker cookie attachment is the remaining runtime uncertainty. Chrome normally sends SameSite=Lax cookies with host-permission fetches, but that was not empirically verified against a live VULMS session during this build. The content-script fallback exists for that case, and it only works while a VULMS tab is open.
 - Popup filters are All / Assignment / Quiz / GDB, plus a small course dropdown when more than one course is present.
 
-## Todoist Integration
+## Editions
 
-Todoist is optional. If you never connect it, the extension behaves exactly as V1: local VULMS deadlines and Chrome notifications only.
-
-### How to connect
-
-1. Load the unpacked extension and open the popup.
-2. Click **Connect Todoist**. Chrome will ask for the extra `identity` and Todoist host permissions.
-3. Authorize VU Buddy in the Todoist OAuth window.
-4. Choose a Todoist project, or click **Create "VU University" project**.
-5. Click **Sync to Todoist**, or leave **Automatically sync new/changed deadlines** checked.
-
-No Todoist API token is pasted. No Todoist password is stored.
-
-OAuth uses Todoist's public-client path:
-
-1. Dynamic client registration at `https://api.todoist.com/oauth/register` with `token_endpoint_auth_method: none`
-2. Authorization code + PKCE at `https://app.todoist.com/oauth/authorize`
-3. Token exchange at `https://api.todoist.com/oauth/access_token` **without a client secret**
-
-Access and refresh tokens are stored in `chrome.storage.local` under `vuTodoistAuth`. Only the service worker reads that key. The popup, content script, and VULMS pages never see tokens.
-
-### What is synchronized
-
-Each VULMS activity becomes one Todoist task:
-
-```text
-MTH301 — Quiz-01
-```
-
-The due date is the normalized VULMS deadline. The description includes course name, code, type, semester, and a VULMS link.
-
-Stable VULMS IDs such as `summer-2026:mth301:quiz:1` are mapped to Todoist task IDs locally. A deadline extension updates the existing task. It does not create a duplicate.
-
-If a mapped Todoist task was deleted, the next sync creates a replacement and updates the mapping.
-
-If an activity disappears from VULMS, the Todoist task is left untouched. V1 never deletes Todoist tasks.
-
-**Disconnect Todoist** removes local OAuth tokens. Existing Todoist tasks are not deleted. Mappings are kept so a later reconnect can update the same tasks.
-
-Automatic sync runs after a successful VULMS sync, and only if Todoist is connected, a project is selected, and the checkbox is on. A Todoist failure never clears the VULMS cache.
-
-Labels are not created automatically.
+This package is the student edition: deadlines stay in your browser. It does not connect to Todoist or any other third-party service.
 
 ## Future V2 ideas
 
