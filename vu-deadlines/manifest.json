@@ -3,7 +3,7 @@
   "name": "VU Buddy",
   "short_name": "VU Buddy",
   "version": "1.2.0",
-  "description": "Track Virtual University LMS deadlines locally. By Ar Gorsi.",
+  "description": "Track VULMS assignment, quiz, and GDB deadlines locally. Unofficial. Not affiliated with VU.",
   "author": "Ar Gorsi",
   "permissions": [
     "storage",

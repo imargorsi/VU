@@ -2,6 +2,8 @@
 
 A small Manifest V3 Chrome extension by **Ar Gorsi**. It reads your VULMS To Do Calendar while you are already logged in, stores assignment / quiz / GDB deadlines locally, and reminds you before they are due.
 
+This is the student edition. Unofficial. Not affiliated with Virtual University of Pakistan. Publish this checkout to the Chrome Web Store; do not publish the `todoist` branch.
+
 VULMS course codes such as `MTH301` and `CS302` are easy to forget. This extension keeps the deadlines in a popup dashboard and in Chrome notifications.
 
 ## What it does
