@@ -77,6 +77,7 @@ required = {
     "icons/icon16.png",
     "icons/icon48.png",
     "icons/icon128.png",
+    "icons/logo.png",
 }
 forbidden_prefixes = ("tests/",)
 forbidden_names = {"README.md", "todoist.js", ".git"}
