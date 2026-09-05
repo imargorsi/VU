@@ -1,2 +1,4 @@
 # Internal documentation. Not part of the Chrome extension package.
 /doc/
+# Built Chrome Web Store zip (regenerate with scripts/pack-chrome-store.sh).
+/store/*.zip
