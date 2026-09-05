@@ -245,7 +245,7 @@ function renderList(items, now) {
       '<article class="card is-' + status + '">' +
         '<div class="card-top">' +
           '<div class="course-code">' + escapeHtml(item.courseCode) + "</div>" +
-          '<div class="pill">' + escapeHtml(typeLabel(item.type)) + "</div>" +
+          '<div class="pill pill-type">' + escapeHtml(typeLabel(item.type)) + "</div>" +
         "</div>" +
         courseName +
         '<p class="activity-title">' + escapeHtml(item.title) + "</p>" +
@@ -278,7 +278,12 @@ function render(state) {
   } else if (currentState.fetchPath === "page-context") {
     meta += " · via open VULMS tab";
   }
-  $("sync-meta").textContent = meta;
+  $("sync-meta-text").textContent = meta;
+  $("sync-meta").classList.toggle("is-ok", currentState.syncStatus === "ok");
+  $("sync-meta").classList.toggle(
+    "is-warn",
+    currentState.syncStatus === "stale" || currentState.syncStatus === "error"
+  );
   renderBanner(currentState);
   renderCourseFilter(currentState);
   var items = visibleActivities(currentState, now);
@@ -299,6 +304,19 @@ function render(state) {
 function setSyncing(isSyncing) {
   $("sync-btn").disabled = isSyncing;
   $("sync-btn").textContent = isSyncing ? "Syncing…" : "Sync Now";
+  var refresh = $("refresh-btn");
+  if (refresh) {
+    refresh.disabled = isSyncing;
+    refresh.classList.toggle("is-spinning", isSyncing);
+  }
+}
+
+function startSync() {
+  setSyncing(true);
+  runtimeSend({ type: "VU_SYNC_NOW" }, function (state) {
+    setSyncing(false);
+    render(state || currentState);
+  });
 }
 
 function requestState() {
@@ -307,13 +325,8 @@ function requestState() {
   });
 }
 
-$("sync-btn").addEventListener("click", function () {
-  setSyncing(true);
-  runtimeSend({ type: "VU_SYNC_NOW" }, function (state) {
-    setSyncing(false);
-    render(state || currentState);
-  });
-});
+$("sync-btn").addEventListener("click", startSync);
+$("refresh-btn").addEventListener("click", startSync);
 
 document.querySelectorAll(".chip").forEach(function (chip) {
   chip.addEventListener("click", function () {
