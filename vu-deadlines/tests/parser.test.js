@@ -304,6 +304,46 @@ test("already sent reminders are not sent again", function () {
   assert.strictEqual(plan.send, null);
 });
 
+var digestNow = new Date("2026-09-05T10:00:00+05:00");
+var digestActivities = [
+  { courseCode: "CS302", title: "Assignment-01", dueAt: "2026-09-01T23:59:00+05:00" },
+  { courseCode: "MTH301", title: "Quiz-01", dueAt: "2026-09-06T23:59:00+05:00" },
+  { courseCode: "ENG201", title: "GDB-01", dueAt: "2026-09-08T23:59:00+05:00" },
+  { courseCode: "CS201", title: "Quiz-02", dueAt: "2026-09-10T23:59:00+05:00" },
+  { courseCode: "PHY301", title: "Quiz-03", dueAt: "2026-09-20T23:59:00+05:00" }
+];
+
+test("daily digest summarizes this week and names the soonest deadline", function () {
+  var plan = notifications.planDigest({ activities: digestActivities }, digestNow);
+  assert.strictEqual(plan.send, true);
+  assert.strictEqual(plan.lastDigestYmd, "2026-09-05");
+  assert.strictEqual(plan.message, "3 due this week — MTH301 Quiz-01 tomorrow");
+});
+
+test("daily digest waits until 08:00 Asia/Karachi", function () {
+  var plan = notifications.planDigest(
+    { activities: digestActivities },
+    new Date("2026-09-05T07:30:00+05:00")
+  );
+  assert.strictEqual(plan.send, false);
+});
+
+test("daily digest sends at most once per Karachi day", function () {
+  var plan = notifications.planDigest(
+    { activities: digestActivities, lastDigestYmd: "2026-09-05" },
+    digestNow
+  );
+  assert.strictEqual(plan.send, false);
+});
+
+test("daily digest stays quiet when nothing is due this week", function () {
+  var plan = notifications.planDigest(
+    { activities: [digestActivities[0], digestActivities[4]] },
+    digestNow
+  );
+  assert.strictEqual(plan.send, false);
+});
+
 console.log("");
 console.log(passed + " passed, " + failed + " failed");
 process.exit(failed ? 1 : 0);

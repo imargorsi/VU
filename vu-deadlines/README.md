@@ -13,6 +13,7 @@ VULMS course codes such as `MTH301` and `CS302` are easy to forget. This extensi
 - Shows assignments, quizzes, GDBs, and unknown academic types
 - Sorts overdue items first, then the nearest upcoming deadline
 - Sends Chrome notifications 72 hours, 24 hours, and 2 hours before a deadline
+- Sends one daily digest after 8:00 AM Pakistan time (for example: `3 due this week — MTH301 Quiz-01 tomorrow`)
 - Stores everything in `chrome.storage.local`
 
 It does not include a backend, accounts, analytics, Google Calendar, WhatsApp, Todoist, or AI.
@@ -118,7 +119,8 @@ If a teacher extends a deadline, the same activity is updated. Reminder flags ar
   "syncStatus": "never",
   "syncError": null,
   "fetchPath": null,
-  "sessionDiagnostic": null
+  "sessionDiagnostic": null,
+  "lastDigestYmd": null
 }
 ```
 

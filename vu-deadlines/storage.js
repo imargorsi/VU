@@ -15,7 +15,8 @@
     syncStatus: "never",
     syncError: null,
     fetchPath: null,
-    sessionDiagnostic: null
+    sessionDiagnostic: null,
+    lastDigestYmd: null
   };
 
   function cloneDefault() {
@@ -27,7 +28,8 @@
       syncStatus: "never",
       syncError: null,
       fetchPath: null,
-      sessionDiagnostic: null
+      sessionDiagnostic: null,
+      lastDigestYmd: null
     };
   }
 
@@ -48,6 +50,7 @@
     state.syncError = raw.syncError || null;
     state.fetchPath = raw.fetchPath || null;
     state.sessionDiagnostic = raw.sessionDiagnostic || null;
+    state.lastDigestYmd = typeof raw.lastDigestYmd === "string" ? raw.lastDigestYmd : null;
     return state;
   }
 
