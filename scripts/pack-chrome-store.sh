@@ -75,6 +75,7 @@ required = {
     "popup.js",
     "popup.css",
     "icons/icon16.png",
+    "icons/icon32.png",
     "icons/icon48.png",
     "icons/icon128.png",
     "icons/logo.png",
@@ -106,6 +107,18 @@ with zipfile.ZipFile(path) as zf:
         raise SystemExit("student zip still mentions Todoist")
     if manifest.get("host_permissions") != ["https://vulms.vu.edu.pk/*"]:
         raise SystemExit("unexpected host_permissions")
+    expected_sizes = {
+        "icons/icon16.png": (16, 16),
+        "icons/icon32.png": (32, 32),
+        "icons/icon48.png": (48, 48),
+        "icons/icon128.png": (128, 128),
+    }
+    import struct
+    for name, (ew, eh) in expected_sizes.items():
+        data = zf.read(name)
+        w, h = struct.unpack(">II", data[16:24])
+        if (w, h) != (ew, eh):
+            raise SystemExit(f"{name} is {w}x{h}, expected {ew}x{eh}")
     print("package ok")
     print("files:", len(names))
     print("description chars:", len(manifest["description"]))

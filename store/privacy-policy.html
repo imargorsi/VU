@@ -28,13 +28,14 @@
     <p>
       While you are already signed in to VULMS in Chrome, the extension reads the To Do Calendar
       and course names, stores upcoming assignment / quiz / GDB deadlines on your computer, shows
-      them in a popup, and can send Chrome reminders before they are due.
+      them in a popup, and can send Chrome reminders before they are due (72 hours, 24 hours, 2 hours,
+      plus one daily digest after 08:00 Pakistan time).
     </p>
 
     <h2>Data stored on your device</h2>
     <p>
-      Deadlines, course codes, course names, reminder flags, and sync status are stored only in
-      Chrome’s local extension storage on this browser profile.
+      Deadlines, course codes, course names, reminder flags, sync status, and a last-digest date are
+      stored only in Chrome’s local extension storage on this browser profile.
     </p>
     <p>The extension does not store your VULMS username, password, roll number, cookies, or session tokens.</p>
 
@@ -43,25 +44,38 @@
       The only network destination is <code>https://vulms.vu.edu.pk</code>, to fetch the calendar and
       home page using the VULMS session Chrome already has. The extension never reads cookie values.
     </p>
+    <p>
+      A content script runs only on <code>https://vulms.vu.edu.pk/*</code>. It is a fallback fetch in
+      that page’s origin if the background worker cannot see your existing session. It does not run on
+      other sites and does not inject ads or trackers.
+    </p>
     <p>There is no VU Deadlines server, account, analytics, advertising, crash reporting, or CDN.</p>
 
     <h2>What we do not collect</h2>
     <p>
       The developer does not receive your VULMS data, browsing history, or identifiers. Nothing is
-      sold or used for advertising.
+      sold, used for advertising, or shared with third parties.
+    </p>
+
+    <h2>How to delete your data</h2>
+    <p>
+      Remove the extension from Chrome. That deletes the local cache on this profile. You can also
+      clear it with Chrome’s “Clear browsing data” for extension storage, or by removing the unpacked
+      / installed item.
     </p>
 
     <h2>Permissions</h2>
     <ul>
       <li><strong>storage</strong> — keep deadlines on this device</li>
       <li><strong>alarms</strong> — refresh the calendar and check reminders while the worker is asleep</li>
-      <li><strong>notifications</strong> — 72-hour, 24-hour, and 2-hour reminders</li>
+      <li><strong>notifications</strong> — deadline reminders and the daily digest</li>
       <li><strong>https://vulms.vu.edu.pk/*</strong> — read the calendar and home page you are already using</li>
     </ul>
 
     <h2>Contact</h2>
     <p>
       Use the Chrome Web Store listing’s support link for VU Deadlines, published by Ar Gorsi.
+      Privacy questions about this extension can also be sent through that listing.
     </p>
   </body>
 </html>
