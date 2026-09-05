@@ -36,17 +36,32 @@
 
     <section class="summary" id="summary" aria-label="Deadline summary">
       <div class="stat">
-        <span class="stat-icon stat-icon-upcoming" aria-hidden="true"></span>
+        <span class="stat-icon stat-icon-upcoming" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+            <path d="M3 10h18M8 3v4M16 3v4"></path>
+          </svg>
+        </span>
         <strong id="count-upcoming">0</strong>
         <span>Upcoming</span>
       </div>
       <div class="stat stat-today">
-        <span class="stat-icon stat-icon-today" aria-hidden="true"></span>
+        <span class="stat-icon stat-icon-today" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="13" r="8"></circle>
+            <path d="M12 9v4l3 2"></path>
+          </svg>
+        </span>
         <strong id="count-today">0</strong>
         <span>Due Today</span>
       </div>
       <div class="stat stat-overdue">
-        <span class="stat-icon stat-icon-overdue" aria-hidden="true"></span>
+        <span class="stat-icon stat-icon-overdue" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3 22 20H2z"></path>
+            <path d="M12 10v5M12 17h.01"></path>
+          </svg>
+        </span>
         <strong id="count-overdue">0</strong>
         <span>Overdue</span>
       </div>
@@ -59,7 +74,7 @@
       <button class="chip" data-filter="gdb" type="button">GDB</button>
     </nav>
 
-    <div id="course-filter-wrap" class="course-filter-wrap" hidden>
+    <div id="course-filter-wrap" class="course-filter-wrap">
       <label for="course-filter">Course</label>
       <select id="course-filter">
         <option value="all">All courses</option>

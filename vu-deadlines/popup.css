@@ -207,26 +207,30 @@ h1 {
 }
 
 .stat-icon {
-  display: block;
-  width: 22px;
-  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
   margin: 0 auto 4px;
-  border-radius: 7px;
+  border-radius: 8px;
+  color: var(--primary);
+  background: #eef2ff;
 }
 
-.stat-icon-upcoming {
-  background: #eef2ff;
-  box-shadow: inset 0 0 0 5px var(--primary);
+.stat-icon svg {
+  width: 15px;
+  height: 15px;
 }
 
 .stat-icon-today {
+  color: var(--success);
   background: #ccfbf1;
-  box-shadow: inset 0 0 0 5px var(--success);
 }
 
 .stat-icon-overdue {
+  color: var(--danger);
   background: #fee2e2;
-  box-shadow: inset 0 0 0 5px var(--danger);
 }
 
 .stat strong {
@@ -299,10 +303,30 @@ h1 {
 }
 
 .card {
+  position: relative;
+  overflow: hidden;
   background: var(--paper);
   border-radius: 16px;
-  padding: 12px 14px;
+  padding: 12px 14px 12px 16px;
   box-shadow: var(--shadow);
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--primary);
+}
+
+.card.is-due-today::before {
+  background: var(--success);
+}
+
+.card.is-overdue::before {
+  background: var(--danger);
 }
 
 .card-top {
@@ -353,16 +377,25 @@ h1 {
 }
 
 .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   background: var(--surface);
   color: var(--muted);
   border-radius: 999px;
   padding: 3px 8px;
 }
 
+.meta-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
 .pill-type {
   background: #eef2ff;
   color: var(--primary);
-  font-weight: 650;
+  font-weight: 600;
 }
 
 .empty {

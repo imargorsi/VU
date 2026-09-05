@@ -212,11 +212,6 @@ function renderCourseFilter(state) {
     }
   });
   codes.sort();
-  if (codes.length < 2) {
-    wrap.hidden = true;
-    courseFilter = "all";
-    return;
-  }
   wrap.hidden = false;
   var current = courseFilter;
   select.innerHTML = '<option value="all">All courses</option>' + codes.map(function (code) {
@@ -251,8 +246,14 @@ function renderList(items, now) {
         '<p class="activity-title">' + escapeHtml(item.title) + "</p>" +
         '<p class="relative">' + escapeHtml(relativeLabel(item, now)) + "</p>" +
         '<div class="meta">' +
-          '<span class="pill">' + escapeHtml(formatDue(item.dueAt)) + "</span>" +
-          '<span class="pill">' + escapeHtml(formatTime(item.dueAt)) + "</span>" +
+          '<span class="pill">' +
+            '<svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg>' +
+            escapeHtml(formatDue(item.dueAt)) +
+          "</span>" +
+          '<span class="pill">' +
+            '<svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l3 2"></path></svg>' +
+            escapeHtml(formatTime(item.dueAt)) +
+          "</span>" +
           marks +
         "</div>" +
       "</article>"
