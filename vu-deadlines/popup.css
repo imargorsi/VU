@@ -1,18 +1,20 @@
 :root {
-  --bg: #eef3fb;
+  --bg: #eef7ff;
   --paper: #ffffff;
-  --ink: #12243a;
-  --muted: #5b6b82;
-  --line: rgba(26, 95, 212, 0.14);
-  --blue: #1a5fd4;
-  --blue-deep: #1248a8;
-  --navy: #0d2b6b;
+  --ink: #1b1640;
+  --muted: #5b5d82;
+  --line: rgba(97, 151, 238, 0.28);
+  --cyan: #13d4e2;
+  --purple: #905af6;
+  --blue: #6197ee;
+  --blue-deep: #6b5ef0;
+  --navy: #2a1f66;
   --gold: #f0b429;
   --overdue: #e23b3b;
   --today: #e11d48;
-  --soon: #1a5fd4;
+  --soon: #6197ee;
   --ok: #16a34a;
-  --shadow: 0 8px 24px rgba(13, 43, 107, 0.08);
+  --shadow: 0 8px 24px rgba(144, 90, 246, 0.12);
 }
 
 * {
@@ -31,9 +33,7 @@ body {
   max-height: 600px;
   overflow: auto;
   color: var(--ink);
-  background:
-    radial-gradient(900px 160px at 100% -40px, rgba(26, 95, 212, 0.12), transparent 55%),
-    var(--bg);
+  background: linear-gradient(to top right, #f4edff, #e6fbff);
   font: 13px/1.45 "Segoe UI", system-ui, -apple-system, sans-serif;
 }
 
@@ -55,10 +55,10 @@ body {
 .logo {
   width: 40px;
   height: 40px;
-  border-radius: 11px;
+  border-radius: 50%;
   box-shadow: var(--shadow);
   flex-shrink: 0;
-  background: var(--paper);
+  background: linear-gradient(to top right, var(--purple), var(--cyan));
 }
 
 h1 {
@@ -88,7 +88,7 @@ h1 {
 .sync-btn {
   appearance: none;
   border: 0;
-  background: var(--blue);
+  background: linear-gradient(135deg, var(--purple), var(--cyan));
   color: #fff;
   border-radius: 10px;
   padding: 8px 12px;
@@ -98,7 +98,7 @@ h1 {
 }
 
 .sync-btn:hover {
-  background: var(--blue-deep);
+  background: linear-gradient(135deg, var(--blue-deep), var(--purple));
 }
 
 .sync-btn:disabled {
@@ -182,8 +182,8 @@ h1 {
 }
 
 .chip.is-active {
-  background: var(--blue);
-  border-color: var(--blue);
+  background: linear-gradient(135deg, var(--purple), var(--cyan));
+  border-color: transparent;
   color: #fff;
 }
 
@@ -384,8 +384,8 @@ h1 {
 .todoist-actions button,
 .ghost-btn {
   appearance: none;
-  border: 1px solid var(--blue);
-  background: var(--blue);
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, var(--purple), var(--cyan));
   color: #fff;
   border-radius: 10px;
   padding: 6px 10px;
@@ -396,6 +396,7 @@ h1 {
 
 .ghost-btn {
   background: transparent;
+  border-color: var(--purple);
   color: var(--blue-deep);
 }
 
