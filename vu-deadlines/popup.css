@@ -9,7 +9,7 @@
   --ink: #0f172a;
   --muted: #64748b;
   --line: #e2e8f0;
-  --shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  --shadow: 0 10px 28px rgba(79, 70, 229, 0.08);
   --blue: var(--primary);
   --blue-deep: #4338ca;
   --navy: var(--ink);
@@ -18,6 +18,7 @@
   --soon: var(--primary);
   --ok: var(--success);
   --purple: var(--secondary);
+  --brand: linear-gradient(135deg, #4f46e5, #7c3aed);
 }
 
 * {
@@ -33,15 +34,29 @@ body {
 body {
   width: 400px;
   min-height: 420px;
-  max-height: 600px;
+  max-height: 580px;
   overflow: auto;
   color: var(--ink);
-  background: var(--bg);
+  background:
+    radial-gradient(120px 80px at 0% 0%, rgba(124, 58, 237, 0.12), transparent 70%),
+    radial-gradient(160px 90px at 100% 0%, rgba(79, 70, 229, 0.1), transparent 70%),
+    var(--bg);
   font: 13px/1.45 "Segoe UI", system-ui, -apple-system, sans-serif;
+  scrollbar-width: thin;
+  scrollbar-color: #c7d2fe transparent;
+}
+
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #c7d2fe;
+  border-radius: 99px;
 }
 
 .header {
-  padding: 14px 16px 10px;
+  padding: 14px 16px 8px;
 }
 
 .header-row {
@@ -62,27 +77,21 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  box-shadow: var(--shadow);
+  box-shadow: 0 0 0 2px #fff, 0 8px 20px rgba(79, 70, 229, 0.28);
   flex-shrink: 0;
 }
 
 h1 {
   margin: 0;
   color: var(--ink);
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   line-height: 1.15;
 }
 
 .tagline {
-  margin: 2px 0 0;
-  color: var(--muted);
-  font-size: 11px;
-}
-
-.byline {
-  margin: 2px 0 0;
+  margin: 3px 0 0;
   color: var(--muted);
   font-size: 11px;
 }
@@ -110,6 +119,7 @@ h1 {
 
 .icon-btn:hover {
   border-color: var(--primary);
+  background: #eef2ff;
 }
 
 .icon-btn.is-spinning svg {
@@ -125,30 +135,32 @@ h1 {
 .sync-btn {
   appearance: none;
   border: 0;
-  background: var(--primary);
+  background: var(--brand);
   color: #fff;
   border-radius: 999px;
   padding: 8px 14px;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.28);
 }
 
 .sync-btn:hover {
-  background: var(--blue-deep);
+  filter: brightness(1.05);
 }
 
 .sync-btn:disabled,
 .icon-btn:disabled {
   opacity: 0.65;
   cursor: wait;
+  filter: none;
 }
 
 .sync-meta {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin: 10px 0 0;
+  margin: 8px 0 0;
   color: var(--muted);
   font-size: 11px;
 }
@@ -199,10 +211,12 @@ h1 {
 }
 
 .stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   background: var(--paper);
   border-radius: 14px;
-  padding: 10px 8px;
-  text-align: center;
+  padding: 10px 10px;
   box-shadow: var(--shadow);
 }
 
@@ -210,17 +224,18 @@ h1 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  margin: 0 auto 4px;
-  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
   color: var(--primary);
   background: #eef2ff;
+  flex-shrink: 0;
 }
 
 .stat-icon svg {
-  width: 15px;
-  height: 15px;
+  display: block;
+  width: 16px;
+  height: 16px;
 }
 
 .stat-icon-today {
@@ -233,23 +248,29 @@ h1 {
   background: #fee2e2;
 }
 
-.stat strong {
+.stat-copy {
+  min-width: 0;
+}
+
+.stat-copy strong {
   display: block;
-  font-size: 20px;
+  font-size: 18px;
+  line-height: 1.1;
   color: var(--primary);
 }
 
-.stat-today strong {
+.stat-today .stat-copy strong {
   color: var(--success);
 }
 
-.stat-overdue strong {
+.stat-overdue .stat-copy strong {
   color: var(--danger);
 }
 
-.stat span {
+.stat-label {
+  display: block;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 9px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -271,9 +292,14 @@ h1 {
   font-size: 12px;
 }
 
-.chip.is-active {
-  background: var(--primary);
+.chip:hover {
   border-color: var(--primary);
+  color: var(--primary);
+}
+
+.chip.is-active {
+  background: var(--brand);
+  border-color: transparent;
   color: #fff;
 }
 
@@ -291,7 +317,7 @@ h1 {
   border: 1px solid var(--line);
   background: var(--paper);
   border-radius: 12px;
-  padding: 8px 10px;
+  padding: 9px 10px;
   color: var(--ink);
 }
 
@@ -493,12 +519,12 @@ h1 {
 .ghost-btn {
   appearance: none;
   border: 1px solid transparent;
-  background: var(--primary);
+  background: var(--brand);
   color: #fff;
   border-radius: 999px;
   padding: 6px 10px;
   font-size: 12px;
-  font-weight: 650;
+  font-weight: 600;
   cursor: pointer;
 }
 

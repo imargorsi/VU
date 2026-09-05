@@ -255,7 +255,22 @@ async function checkRemindersOnly() {
   }
 }
 
+function applyToolbarIcon() {
+  if (!chrome.action || !chrome.action.setIcon) {
+    return;
+  }
+  chrome.action.setIcon({
+    path: {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  });
+}
+
 chrome.runtime.onInstalled.addListener(function () {
+  applyToolbarIcon();
   ensureAlarms().then(function () {
     return syncDeadlines("install");
   });
@@ -303,4 +318,5 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
   }
 });
 
+applyToolbarIcon();
 ensureAlarms();

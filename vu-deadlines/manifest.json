@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "VU Deadlines",
   "short_name": "VU Deadlines",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Track VULMS assignment, quiz, and GDB due dates locally. Unofficial. Not affiliated with VU.",
   "author": "Ar Gorsi",
   "permissions": [

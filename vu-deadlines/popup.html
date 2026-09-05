@@ -13,8 +13,7 @@
           <img class="logo" src="icons/logo.png" width="40" height="40" alt="" />
           <div>
             <h1>VU Deadlines</h1>
-            <p class="tagline">Never miss a deadline</p>
-            <p class="byline">by Ar Gorsi</p>
+            <p class="tagline">Never miss a deadline · by Ar Gorsi</p>
           </div>
         </div>
         <div class="header-actions">
@@ -37,33 +36,37 @@
     <section class="summary" id="summary" aria-label="Deadline summary">
       <div class="stat">
         <span class="stat-icon stat-icon-upcoming" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <rect x="3" y="5" width="18" height="16" rx="2"></rect>
-            <path d="M3 10h18M8 3v4M16 3v4"></path>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill-rule="evenodd">
+            <path fill="currentColor" d="M19 4h-1V3a1 1 0 1 0-2 0v1H8V3a1 1 0 1 0-2 0v1H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10z"/>
           </svg>
         </span>
-        <strong id="count-upcoming">0</strong>
-        <span>Upcoming</span>
+        <div class="stat-copy">
+          <strong id="count-upcoming">0</strong>
+          <span class="stat-label">Upcoming</span>
+        </div>
       </div>
       <div class="stat stat-today">
         <span class="stat-icon stat-icon-today" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <circle cx="12" cy="13" r="8"></circle>
-            <path d="M12 9v4l3 2"></path>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill-rule="evenodd">
+            <path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16z"/>
+            <path fill="currentColor" d="M11.25 7h1.5v5.15l4.1 2.45-.75 1.25-4.85-2.9z"/>
           </svg>
         </span>
-        <strong id="count-today">0</strong>
-        <span>Due Today</span>
+        <div class="stat-copy">
+          <strong id="count-today">0</strong>
+          <span class="stat-label">Due Today</span>
+        </div>
       </div>
       <div class="stat stat-overdue">
         <span class="stat-icon stat-icon-overdue" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3 22 20H2z"></path>
-            <path d="M12 10v5M12 17h.01"></path>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill-rule="evenodd">
+            <path fill="currentColor" d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
           </svg>
         </span>
-        <strong id="count-overdue">0</strong>
-        <span>Overdue</span>
+        <div class="stat-copy">
+          <strong id="count-overdue">0</strong>
+          <span class="stat-label">Overdue</span>
+        </div>
       </div>
     </section>
 

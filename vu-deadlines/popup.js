@@ -247,11 +247,11 @@ function renderList(items, now) {
         '<p class="relative">' + escapeHtml(relativeLabel(item, now)) + "</p>" +
         '<div class="meta">' +
           '<span class="pill">' +
-            '<svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg>' +
+            '<svg class="meta-icon" viewBox="0 0 24 24" width="12" height="12" fill-rule="evenodd" aria-hidden="true"><path fill="currentColor" d="M19 4h-1V3a1 1 0 1 0-2 0v1H8V3a1 1 0 1 0-2 0v1H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10z"/></svg>' +
             escapeHtml(formatDue(item.dueAt)) +
           "</span>" +
           '<span class="pill">' +
-            '<svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l3 2"></path></svg>' +
+            '<svg class="meta-icon" viewBox="0 0 24 24" width="12" height="12" fill-rule="evenodd" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16z"/><path fill="currentColor" d="M11.25 7h1.5v5.15l4.1 2.45-.75 1.25-4.85-2.9z"/></svg>' +
             escapeHtml(formatTime(item.dueAt)) +
           "</span>" +
           marks +
