@@ -15,13 +15,14 @@ git checkout todoist
 
 Then in Chrome: Load unpacked → `vu-deadlines/`.
 
-## Share with students
+## Share with students / Chrome Web Store
 
 ```bash
 git checkout main
+bash scripts/pack-chrome-store.sh
 ```
 
-Zip or share only `vu-deadlines/`. Do not include `doc/`.
+Upload `store/vu-buddy-*-chrome.zip`. Host `store/privacy-policy.html` on HTTPS for the listing. Do not zip `doc/` or the `todoist` branch.
 
 Switch back afterwards:
 
