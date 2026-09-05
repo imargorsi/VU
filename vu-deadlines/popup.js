@@ -313,8 +313,8 @@ function renderTodoist(todoist) {
   var statusHtml;
   var body;
   footer.textContent = connected
-    ? "Selected VULMS deadlines are sent to Todoist when sync is enabled."
-    : "Without Todoist, your VULMS data stays in this browser.";
+    ? "Unofficial. Selected VULMS deadlines are sent to Todoist when sync is enabled."
+    : "Unofficial. Without Todoist, your VULMS data stays in this browser.";
 
   if (expired) {
     statusHtml = '<span class="todoist-status is-warn">⚠ Connection expired</span>';

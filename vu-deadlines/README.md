@@ -2,6 +2,8 @@
 
 A small Manifest V3 Chrome extension by **Ar Gorsi**. It reads your VULMS To Do Calendar while you are already logged in, stores assignment / quiz / GDB deadlines locally, and reminds you before they are due.
 
+This folder on git branch `todoist` is the **Todoist edition** (your copy). The student edition with no Todoist code or permissions is on `main`. See `BRANCHES.md` at the repo root. Zip or share `vu-deadlines/` from `main` for other students.
+
 VULMS course codes such as `MTH301` and `CS302` are easy to forget. This extension keeps the deadlines in a popup dashboard and in Chrome notifications.
 
 ## What it does
@@ -149,6 +151,8 @@ node tests/parser.test.js
 node tests/todoist.test.js
 ```
 
+`todoist.test.js` exists on this branch only. The student `main` checkout runs `parser.test.js` alone.
+
 No extra packages are required.
 
 ## Architecture
@@ -191,7 +195,7 @@ If the service-worker fetch comes back as a login page while a VULMS tab is open
 
 ## Todoist Integration
 
-Todoist is optional. If you never connect it, the extension behaves exactly as V1: local VULMS deadlines and Chrome notifications only.
+This section applies to the `todoist` branch only. If you never connect Todoist here, VULMS behaviour is unchanged: local deadlines and Chrome notifications only.
 
 ### How to connect
 
